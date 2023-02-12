@@ -1,0 +1,12 @@
+clang
+-target=avr
+-mmcu=avr128db48
+-nostdinc
+-ffreestanding
+-Iasync.h/
+-I/usr/avr/include
+-I/usr/lib/gcc/avr/11/include
+-I/usr/lib/gcc/avr/11/include-fixed
+-D__AVR_AVR128DB48__
+%h -x
+%h c-header

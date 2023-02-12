@@ -1,0 +1,3 @@
+[submodule "async.h"]
+	path = async.h
+	url = https://github.com/naasking/async.h.git
