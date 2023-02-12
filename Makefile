@@ -1,6 +1,6 @@
 
 CC=avr-gcc
-CFLAGS := -Wall -Warray-bounds=0 -ffreestanding -mmcu=avr128db48 -Iasync.h/
+CFLAGS := -Wall -Warray-bounds=0 -ffreestanding -mmcu=avr128db48 -Iasync.h/ -mrelax
 CFLAGS += -O3
 LDFLAGS := 
 

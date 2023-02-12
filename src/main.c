@@ -14,7 +14,6 @@ typedef struct {
     PORT_t *port;
     pin_t pin;
     unsigned period;
-    newdelay_state ndpt;
     delay_info dpt;
 } blink_state;
 
@@ -23,11 +22,9 @@ async blink(blink_state *pt) {
     async_begin(pt);
 
     while (1) {
-        async_init(&(pt->ndpt));
-        pt->ndpt.ms = pt->period;
-        pt->ndpt.ret = &(pt->dpt);
+        async_init(&(pt->dpt));
+        pt->dpt.ms = pt->period;
 
-        await(newdelay(&(pt->ndpt)));
         await(delay(&(pt->dpt)));
 
         pt->port->OUTTGL = 1 << pt->pin;
@@ -51,9 +48,9 @@ blink_state blink_init(PORT_t *port, pin_t pin, unsigned period) {
 
 
 void main() {
-    blink_state pt1 = blink_init(&PORTA, 4, 3141);
-    blink_state pt2 = blink_init(&PORTA, 5, 5926);
-    blink_state pt3 = blink_init(&PORTA, 6, 6535);
+    blink_state pt1 = blink_init(&PORTA, 4, 314);
+    blink_state pt2 = blink_init(&PORTA, 5, 159);
+    blink_state pt3 = blink_init(&PORTA, 6, 265);
 
 
     PORTA.DIRSET = PIN4_bm | PIN5_bm | PIN6_bm;

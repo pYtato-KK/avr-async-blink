@@ -4,7 +4,6 @@
 #define F_CPU 4e6
 
 static const unsigned long long F_RTC = 2048;
-static unsigned int rc = 0;
 
 
 void delay_rtc_init() {
@@ -15,8 +14,10 @@ void delay_rtc_init() {
 }
 
 
-async newdelay(newdelay_state *pt) {
-    async_begin(pt);
+inline async delay(delay_info *di) {
+    async_begin(di);
+    static unsigned int rc = 0;
+
 
     await_while(RTC.STATUS & RTC_CNTBUSY_bm);
 
@@ -24,35 +25,18 @@ async newdelay(newdelay_state *pt) {
         RTC.CNT = 0;
     }
 
-    uint16_t start = RTC.CNT;
-    uint16_t delay = ((pt->ms * F_RTC) / 1000);
+
+    di->start = RTC.CNT;
+    di->delay = ((di->ms * F_RTC) / 1000);
 
 
-    bool overflow = false;
-
-    if ((start + delay) < start) {
-        overflow = true;
+    di->overflow = false;
+    if ((di->start + di->delay) < di->start) {
+        di->overflow = true;
     }
     
     rc++;
 
-    delay_info di = {
-        0,
-        start, 
-        delay, 
-        overflow
-    };
-
-    async_init(&di);
-
-    *(pt->ret) = di;
-
-    async_end;
-}
-
-
-inline async delay(delay_info *di) {
-    async_begin(di);
 
     while (1) {
         async_yield;
